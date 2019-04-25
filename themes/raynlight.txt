@@ -1,20 +1,20 @@
 background=white
-backgroundHighlight=white
+backgroundHighlight=cyan
 prompt=red
 promptHighlight=orange
 err=red
 errHighlight=pink
 
-editorBackground=gray
-editorLineHightlight=lightGray
+editorBackground=lightGray
+editorLineHightlight=lightBlue
 editorLineNumbers=lightBlue
 editorLineNumbersHighlight=cyan
 editorError=red
 editorErrorHighlight=pink
 
 textColor=black
-conditional=yellow
+conditional=blue
 constant=magenta
-function=purple
+function=gray
 string=orange
 comment=lime

@@ -1,14 +1,14 @@
 background=white
-backgroundHighlight=lightGray
+backgroundHighlight=white
 prompt=red
 promptHighlight=orange
 err=red
 errHighlight=pink
 
 editorBackground=gray
-editorLineHightlight=cyan
+editorLineHightlight=lightGray
 editorLineNumbers=lightBlue
-editorLineNumbersHighlight=lightGray
+editorLineNumbersHighlight=cyan
 editorError=red
 editorErrorHighlight=pink
 

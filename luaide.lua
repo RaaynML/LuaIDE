@@ -4,7 +4,7 @@
 --this repo by RaaynML
 --
 
---Variables
+-- -------- Variables
 
 local version = "1.1"
 local arguments = {...}
@@ -35,7 +35,6 @@ local theme = {
 	folder = colors.lime,
 	readOnly = colors.red,
 }
-
 
 local languages = {}
 local currentLanguage = {}

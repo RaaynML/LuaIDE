@@ -1,6 +1,6 @@
 --
---  Lua IDE
---  Made by GravityScore
+-- Lua IDE
+-- Made by GravityScore
 --
 
 -- -------- Variables
@@ -36,7 +36,6 @@ local ideLocation = "/" .. shell.getRunningProgram()
 local themeLocation = "/.LuaIDE-Theme"
 
 local function isAdvanced() return term.isColor and term.isColor() end
-
 
 -- -------- Utilities
 
@@ -188,7 +187,6 @@ local function modRead(properties)
 	return line
 end
 
-
 -- -------- Themes
 
 local defaultTheme = {
@@ -268,7 +266,6 @@ end
 if isAdvanced() then theme = defaultTheme
 else theme = normalTheme end
 
-
 -- -------- Drawing
 
 local function centerPrint(text, ny)
@@ -323,7 +320,6 @@ local function centerRead(wid, begt)
 	term.write("> " .. begt)
 	return modRead({visibleLength = w/2 + wid/2, liveUpdates = liveUpdate})
 end
-
 
 -- -------- Prompt
 
@@ -489,7 +485,6 @@ function monitorKeyboardShortcuts()
 	end
 end
 
-
 -- -------- Saving and Loading
 
 --[[local function download(url, path)
@@ -550,14 +545,13 @@ local function loadFile(path)
 	return l
 end
 
-
 -- -------- Languages
 
 languages.lua = {}
 languages.brainfuck = {}
 languages.none = {}
 
---  Lua
+-- Lua
 
 languages.lua.helpTips = {
 	"A function you tried to call doesn't exist.",
@@ -667,8 +661,7 @@ languages.lua.run = function(path, ar)
 	return err
 end
 
-
---  Brainfuck
+-- Brainfuck
 
 languages.brainfuck.helpTips = {
 	"Well idk...",
@@ -798,7 +791,7 @@ languages.brainfuck.run = function(path)
 	end
 end
 
---  None
+-- None
 
 languages.none.helpTips = {}
 languages.none.defaultHelpTips = {}
@@ -815,10 +808,8 @@ end
 
 languages.none.run = function(path) end
 
-
 -- Load language
 curLanguage = languages.lua
-
 
 -- -------- Run GUI
 
@@ -967,7 +958,6 @@ local function run(path, lines, useArgs)
 	end
 end
 
-
 -- -------- Functions
 
 local function goto()
@@ -1022,7 +1012,6 @@ local function setsyntax()
 		end
 	end
 end
-
 
 -- -------- Re-Indenting
 
@@ -1207,7 +1196,6 @@ local function reindent(contents)
 
 	return new
 end
-
 
 -- -------- Menu
 
@@ -1415,7 +1403,6 @@ local function triggerMenu(cx, cy)
 	term.setCursorBlink(true)
 	return ret
 end
-
 
 -- -------- Editing
 
@@ -1898,7 +1885,6 @@ local function edit(path)
 	return "menu"
 end
 
-
 -- -------- Open File
 
 local function newFile()
@@ -1960,7 +1946,6 @@ local function openFile()
 		elseif opt == "Cancel" then return "menu" end
 	else return "edit", name end
 end
-
 
 -- -------- Settings
 
@@ -2110,7 +2095,6 @@ local function settings()
 	elseif opt == "Exit IDE" then return "exit" end
 end
 
-
 -- -------- Menu
 
 local function menu()
@@ -2124,7 +2108,6 @@ local function menu()
 	elseif opt == "Settings" then return "settings"
 	elseif opt == "Exit IDE" then return "exit" end
 end
-
 
 -- -------- Main
 

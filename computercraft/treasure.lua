@@ -1,11 +1,9 @@
-
 --
 --  Lua IDE
 --  Made by GravityScore
 --
 
-
---  -------- Variables
+-- -------- Variables
 
 -- Version
 local version = "1.0"
@@ -40,7 +38,7 @@ local themeLocation = "/.LuaIDE-Theme"
 local function isAdvanced() return term.isColor and term.isColor() end
 
 
---  -------- Utilities
+-- -------- Utilities
 
 local function modRead(properties)
 	local w, h = term.getSize()
@@ -191,7 +189,7 @@ local function modRead(properties)
 end
 
 
---  -------- Themes
+-- -------- Themes
 
 local defaultTheme = {
 	background = "gray",
@@ -271,7 +269,7 @@ if isAdvanced() then theme = defaultTheme
 else theme = normalTheme end
 
 
---  -------- Drawing
+-- -------- Drawing
 
 local function centerPrint(text, ny)
 	if type(text) == "table" then for _, v in pairs(text) do centerPrint(v) end
@@ -327,7 +325,7 @@ local function centerRead(wid, begt)
 end
 
 
---  -------- Prompt
+-- -------- Prompt
 
 local function prompt(list, dir, isGrid)
 	local function draw(sel)
@@ -492,7 +490,7 @@ function monitorKeyboardShortcuts()
 end
 
 
---  -------- Saving and Loading
+-- -------- Saving and Loading
 
 --[[local function download(url, path)
 	for i = 1, 3 do
@@ -553,7 +551,7 @@ local function loadFile(path)
 end
 
 
---  -------- Languages
+-- -------- Languages
 
 languages.lua = {}
 languages.brainfuck = {}
@@ -822,7 +820,7 @@ languages.none.run = function(path) end
 curLanguage = languages.lua
 
 
---  -------- Run GUI
+-- -------- Run GUI
 
 local function viewErrorHelp(e)
 	title("LuaIDE - Error Help")
@@ -970,7 +968,7 @@ local function run(path, lines, useArgs)
 end
 
 
---  -------- Functions
+-- -------- Functions
 
 local function goto()
 	term.setBackgroundColor(colors[theme.backgroundHighlight])
@@ -1026,7 +1024,7 @@ local function setsyntax()
 end
 
 
---  -------- Re-Indenting
+-- -------- Re-Indenting
 
 local tabWidth = 2
 
@@ -1211,7 +1209,7 @@ local function reindent(contents)
 end
 
 
---  -------- Menu
+-- -------- Menu
 
 local menu = {
 	[1] = {"File",
@@ -1419,7 +1417,7 @@ local function triggerMenu(cx, cy)
 end
 
 
---  -------- Editing
+-- -------- Editing
 
 local standardsCompletions = {
 	"if%s+.+%s+then%s*$",
@@ -1901,7 +1899,7 @@ local function edit(path)
 end
 
 
---  -------- Open File
+-- -------- Open File
 
 local function newFile()
 	local wid = w - 13
@@ -1964,7 +1962,7 @@ local function openFile()
 end
 
 
---  -------- Settings
+-- -------- Settings
 
 local function update()
 --[[
@@ -2113,7 +2111,7 @@ local function settings()
 end
 
 
---  -------- Menu
+-- -------- Menu
 
 local function menu()
 	title("Welcome to LuaIDE " .. version)
@@ -2128,7 +2126,7 @@ local function menu()
 end
 
 
---  -------- Main
+-- -------- Main
 
 local function main(arguments)
 	local opt, data = "menu", nil

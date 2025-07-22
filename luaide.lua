@@ -1,29 +1,22 @@
+--
+--Lua IDE
+--Made by GravityScore, updated by alanzw
+--this repo by RaaynML
+--
 
---  
---  Lua IDE
---  Made by GravityScore
---  
-
-
-
-
---    Variables
+--Variables
 
 local version = "1.1"
 local arguments = {...}
 
-
 local w, h = term.getSize()
 local tabWidth = 2
-
 
 local autosaveInterval = 20
 local allowEditorEvent = true
 local keyboardShortcutTimeout = 0.4
 
-
 local clipboard = nil
-
 
 local theme = {
 	background = colors.gray,
@@ -46,9 +39,7 @@ local theme = {
 
 local languages = {}
 local currentLanguage = {}
-
-
-local updateURL = "https://raw.github.com/GravityScore/LuaIDE/master/computercraft/ide.lua"
+local updateURL = "https://raw.github.com/RaaynML/LuaIDE/master/computercraft/ide.lua"
 local ideLocation = "/" .. shell.getRunningProgram()
 local themeLocation = "/.luaide_theme"
 
@@ -56,10 +47,7 @@ local function isAdvanced()
 	return term.isColor and term.isColor()
 end
 
-
-
-
---  -------- Utilities
+-- -------- Utilities
 
 local function modRead(properties)
 	local w, h = term.getSize()
@@ -209,8 +197,7 @@ local function modRead(properties)
 	return line
 end
 
-
---  -------- Themes
+-- -------- Themes
 
 local defaultTheme = {
 	background = "gray",
@@ -259,15 +246,16 @@ local normalTheme = {
 }
 
 local availableThemes = {
-	{"Water (Default)", "https://raw.github.com/GravityScore/LuaIDE/master/themes/default.txt"},
-	{"Fire", "https://raw.github.com/GravityScore/LuaIDE/master/themes/fire.txt"},
-	{"Sublime Text 2", "https://raw.github.com/GravityScore/LuaIDE/master/themes/st2.txt"},
-	{"Midnight", "https://raw.github.com/GravityScore/LuaIDE/master/themes/midnight.txt"},
-	{"TheOriginalBIT", "https://raw.github.com/GravityScore/LuaIDE/master/themes/bit.txt"},
-	{"Superaxander", "https://raw.github.com/GravityScore/LuaIDE/master/themes/superaxander.txt"},
-	{"Forest", "https://raw.github.com/GravityScore/LuaIDE/master/themes/forest.txt"},
-	{"Night", "https://raw.github.com/GravityScore/LuaIDE/master/themes/night.txt"},
-	{"Original", "https://raw.github.com/GravityScore/LuaIDE/master/themes/original.txt"},
+	{"Water (Default)", "https://raw.github.com/RaaynML/LuaIDE/master/themes/default.txt"},
+	{"Fire", "https://raw.github.com/RaaynML/LuaIDE/master/themes/fire.txt"},
+	{"Sublime Text 2", "https://raw.github.com/RaaynML/LuaIDE/master/themes/st2.txt"},
+	{"Midnight", "https://raw.github.com/RaaynML/LuaIDE/master/themes/midnight.txt"},
+	{"TheOriginalBIT", "https://raw.github.com/RaaynML/LuaIDE/master/themes/bit.txt"},
+	{"Superaxander", "https://raw.github.com/RaaynML/LuaIDE/master/themes/superaxander.txt"},
+	{"Forest", "https://raw.github.com/RaaynML/LuaIDE/master/themes/forest.txt"},
+	{"Night", "https://raw.github.com/RaaynML/LuaIDE/master/themes/night.txt"},
+	{"Light", "https://raw.github.com/RaaynML/LuaIDE/master/themes/light.txt"},
+	{"Original", "https://raw.github.com/RaaynML/LuaIDE/master/themes/original.txt"},
 }
 
 local function loadTheme(path)
@@ -283,12 +271,11 @@ local function loadTheme(path)
 	return config
 end
 
--- Load Theme
+--Load Theme
 if isAdvanced() then theme = defaultTheme
 else theme = normalTheme end
 
-
---  -------- Drawing
+-- -------- Drawing
 
 local function centerPrint(text, ny)
 	if type(text) == "table" then for _, v in pairs(text) do centerPrint(v) end
@@ -343,8 +330,7 @@ local function centerRead(wid, begt)
 	return modRead({visibleLength = w/2 + wid/2, liveUpdates = liveUpdate})
 end
 
-
---  -------- Prompt
+-- -------- Prompt
 
 local function prompt(list, dir, isGrid)
 	local function draw(sel)
@@ -433,14 +419,14 @@ local function scrollingPrompt(list)
 		return ret
 	end
 
-	-- Variables
+	--Variables
 	local sel = 1
 	local loc = 1
 	local len = 3
 	local disList = updateDisplayList(list, loc, len)
 	draw(disList, sel, loc)
 
-	-- Loop
+	--Loop
 	while true do
 		local e, key, x, y = os.pullEvent()
 
@@ -508,8 +494,7 @@ function monitorKeyboardShortcuts()
 	end
 end
 
-
---  -------- Saving and Loading
+-- -------- Saving and Loading
 
 local function download(url, path)
 	for i = 1, 3 do
@@ -569,14 +554,13 @@ local function loadFile(path)
 	return l
 end
 
-
---  -------- Languages
+-- -------- Languages
 
 languages.lua = {}
 languages.brainfuck = {}
 languages.none = {}
 
---  Lua
+--Lua
 
 languages.lua.helpTips = {
 	"A function you tried to call doesn't exist.",
@@ -647,7 +631,7 @@ languages.lua.parseError = function(e)
 		ret.err = e
 		if e:find(":") then
 			ret.filename = e:sub(1, e:find(":") - 1):gsub("^%s*(.-)%s*$", "%1")
-			-- The "" is needed to circumvent a CC bug
+			--The "" is needed to circumvent a CC bug
 			e = (e:sub(e:find(":") + 1) .. ""):gsub("^%s*(.-)%s*$", "%1")
 			if e:find(":") then
 				ret.line = e:sub(1, e:find(":") - 1)
@@ -686,8 +670,7 @@ languages.lua.run = function(path, ar)
 	return err
 end
 
-
---  Brainfuck
+--Brainfuck
 
 languages.brainfuck.helpTips = {
 	"Well idk...",
@@ -719,7 +702,7 @@ languages.brainfuck.parseError = function(e)
 end
 
 languages.brainfuck.mapLoops = function(code)
-	-- Map loops
+	--Map loops
 	local loopLocations = {}
 	local loc = 1
 	local line = 1
@@ -753,21 +736,21 @@ languages.brainfuck.getCompilerErrors = function(code)
 end
 
 languages.brainfuck.run = function(path)
-	-- Read from file
+	--Read from file
 	local f = io.open(path, "r")
 	local content = f:read("*a")
 	f:close()
 
-	-- Define environment
+	--Define environment
 	local dataCells = {}
 	local dataPointer = 1
 	local instructionPointer = 1
 
-	-- Map loops
+	--Map loops
 	local loopLocations = languages.brainfuck.mapLoops(content)
 	if type(loopLocations) == "string" then return loopLocations end
 
-	-- Execute code
+	--Execute code
 	while true do
 		local let = content:sub(instructionPointer, instructionPointer)
 
@@ -817,8 +800,7 @@ languages.brainfuck.run = function(path)
 	end
 end
 
---  None
-
+--None
 languages.none.helpTips = {}
 languages.none.defaultHelpTips = {}
 languages.none.errors = {}
@@ -834,12 +816,10 @@ end
 
 languages.none.run = function(path) end
 
-
--- Load language
+--Load language
 currentLanguage = languages.lua
 
-
---  -------- Run GUI
+-- -------- Run GUI
 
 local function viewErrorHelp(e)
 	title("LuaIDE - Error Help")
@@ -920,7 +900,7 @@ local function run(path, lines, useArgs)
 		if e == "key" then break end
 	end
 
-	-- To prevent key from showing up in editor
+	--To prevent key from showing up in editor
 	os.queueEvent("")
 	os.pullEvent()
 
@@ -976,7 +956,7 @@ local function run(path, lines, useArgs)
 			if opt == "Error Help" then
 				viewErrorHelp(formattedErr)
 			elseif opt == "Go To Line" then
-				-- To prevent key from showing up in editor
+				--To prevent key from showing up in editor
 				os.queueEvent("")
 				os.pullEvent()
 
@@ -986,8 +966,7 @@ local function run(path, lines, useArgs)
 	end
 end
 
-
---  -------- Functions
+-- -------- Functions
 
 local function goto()
 	term.setBackgroundColor(colors[theme.backgroundHighlight])
@@ -1042,14 +1021,11 @@ local function setsyntax()
 	end
 end
 
-
---  -------- Re-Indenting
+-- -------- Re-Indenting
 
 local tabWidth = 2
-
 local comments = {}
 local strings = {}
-
 local increment = {
 	"if%s+.+%s+then%s*$",
 	"for%s+.+%s+do%s*$",
@@ -1057,12 +1033,10 @@ local increment = {
 	"repeat%s*$",
 	"function%s+[a-zA-Z_0-9]\(.*\)%s*$"
 }
-
 local decrement = {
 	"end",
 	"until%s+.+"
 }
-
 local special = {
 	"else%s*$",
 	"elseif%s+.+%s+then%s*$"
@@ -1227,8 +1201,7 @@ local function reindent(contents)
 	return new
 end
 
-
---  -------- Menu
+-- -------- Menu
 
 local menu = {
 	[1] = {"File",
@@ -1260,7 +1233,7 @@ local menu = {
 }
 
 local shortcuts = {
-	-- File
+	--File
 	["ctrl n"] = "New File  ^+N",
 	["ctrl o"] = "Open File ^+O",
 	["ctrl s"] = "Save File ^+S",
@@ -1268,25 +1241,25 @@ local shortcuts = {
 	["ctrl p"] = "Print     ^+P",
 	["ctrl q"] = "Quit      ^+Q",
 
-	-- Edit
+	--Edit
 	["ctrl x"] = "Cut Line   ^+X",
 	["ctrl c"] = "Copy Line  ^+C",
 	["ctrl v"] = "Paste Line ^+V",
 
-	-- Functions
+	--Functions
 	["ctrl g"] = "Go To Line    ^+G",
 	["ctrl i"] = "Re-Indent     ^+I",
 	["ctrl e"] = "Set Syntax    ^+E",
 	["ctrl 203"] = "Start of Line ^+<",
 	["ctrl 205"] = "End of Line   ^+>",
 
-	-- Run
+	--Run
 	["ctrl r"] = "Run Program       ^+R",
 	["ctrl shift r"] = "Run w/ Args ^+Shift+R"
 }
 
 local menuFunctions = {
-	-- File
+	--File
 --	["About"] = function() end,
 --	["Settings"] = function() end,
 	["New File  ^+N"] = function(path, lines) saveFile(path, lines) return "new" end,
@@ -1296,7 +1269,7 @@ local menuFunctions = {
 	["Print     ^+P"] = function(path, lines) saveFile(path, lines) return nil end,
 	["Quit      ^+Q"] = function(path, lines) saveFile(path, lines) return "exit" end,
 
-	-- Edit
+	--Edit
 	["Cut Line   ^+X"] = function(path, lines, y)
 		clipboard = lines[y] table.remove(lines, y) return nil, lines end,
 	["Copy Line  ^+C"] = function(path, lines, y) clipboard = lines[y] end,
@@ -1305,22 +1278,22 @@ local menuFunctions = {
 	["Delete Line"] = function(path, lines, y) table.remove(lines, y) return nil, lines end,
 	["Clear Line"] = function(path, lines, y) lines[y] = "" return nil, lines, "cursor" end,
 
-	-- Functions
+	--Functions
 	["Go To Line    ^+G"] = function() return nil, "go to", goto() end,
 	["Re-Indent     ^+I"] = function(path, lines)
 		local a = reindent(lines) saveFile(path, lines) return nil, a
 	end,
 	["Set Syntax    ^+E"] = function(path, lines)
 		setsyntax()
-		if currentLanguage == languages.brainfuck and lines[1] ~= "-- Syntax: Brainfuck" then
-			table.insert(lines, 1, "-- Syntax: Brainfuck")
+		if currentLanguage == languages.brainfuck and lines[1] ~= "--Syntax: Brainfuck" then
+			table.insert(lines, 1, "--Syntax: Brainfuck")
 			return nil, lines
 		end
 	end,
 	["Start of Line ^+<"] = function() os.queueEvent("key", 199) end,
 	["End of Line   ^+>"] = function() os.queueEvent("key", 207) end,
 
-	-- Run
+	--Run
 	["Run Program       ^+R"] = function(path, lines)
 		saveFile(path, lines)
 		return nil, run(path, lines, false)
@@ -1376,7 +1349,7 @@ local function drawMenu(open)
 end
 
 local function triggerMenu(cx, cy)
-	-- Determine clicked menu
+	--Determine clicked menu
 	local curX = 0
 	local open = nil
 	for _, v in pairs(menu) do
@@ -1389,7 +1362,7 @@ local function triggerMenu(cx, cy)
 	local menux = curX + 2
 	if not open then return false end
 
-	-- Flash menu item
+	--Flash menu item
 	term.setCursorBlink(false)
 	term.setCursorPos(menux, 1)
 	term.setBackgroundColor(colors[theme.background])
@@ -1401,19 +1374,19 @@ local function triggerMenu(cx, cy)
 
 	local ret = true
 
-	-- Pull events on menu
+	--Pull events on menu
 	local ox, oy = term.getCursorPos()
 	while type(ret) ~= "string" do
 		local e, but, x, y = os.pullEvent()
 		if e == "mouse_click" then
-			-- If clicked outside menu
+			--If clicked outside menu
 			if x < menux - 1 or x > menux + len - 1 then break
 			elseif y > #items + 2 then break
 			elseif y == 1 then break end
 
 			for i, v in ipairs(items) do
 				if y == i + 1 and x >= menux and x <= menux + len - 2 then
-					-- Flash when clicked
+					--Flash when clicked
 					term.setCursorPos(menux, y)
 					term.setBackgroundColor(colors[theme.background])
 					term.write(string.rep(" ", len))
@@ -1422,7 +1395,7 @@ local function triggerMenu(cx, cy)
 					sleep(0.1)
 					drawMenu(open)
 
-					-- Return item
+					--Return item
 					ret = v
 					break
 				end
@@ -1435,8 +1408,7 @@ local function triggerMenu(cx, cy)
 	return ret
 end
 
-
---  -------- Editing
+-- -------- Editing
 
 local standardsCompletions = {
 	"if%s+.+%s+then%s*$",
@@ -1498,17 +1470,17 @@ local function writeHighlighted(line)
 end
 
 local function draw()
-	-- Menu
+	--Menu
 	term.setTextColor(colors[theme.textColor])
 	term.setBackgroundColor(colors[theme.editorBackground])
 	term.clear()
 	drawMenu()
 
-	-- Line numbers
+	--Line numbers
 	offx, offy = tostring(#lines):len() + 1, 1
 	edw, edh = w - offx, h - 1
 
-	-- Draw text
+	--Draw text
 	for i = 1, edh do
 		local a = lines[scrolly + i]
 		if a then
@@ -1650,59 +1622,59 @@ local function executeMenuItem(a, path)
 end
 
 local function edit(path)
-	-- Variables
+	--Variables
 	x, y = 1, 1
 	offx, offy = 0, 1
 	scrollx, scrolly = 0, 0
 	lines = loadFile(path)
 	if not lines then return "menu" end
 
-	-- Enable brainfuck
-	if lines[1] == "-- Syntax: Brainfuck" then
+	--Enable brainfuck
+	if lines[1] == "--Syntax: Brainfuck" then
 		currentLanguage = languages.brainfuck
 	end
 
-	-- Clocks
+	--Clocks
 	local autosaveClock = os.clock()
-	local scrollClock = os.clock() -- To prevent redraw flicker
+	local scrollClock = os.clock() --To prevent redraw flicker
 	local liveErrorClock = os.clock()
 	local hasScrolled = false
 
-	-- Draw
+	--Draw
 	draw()
 	term.setCursorPos(x + offx, y + offy)
 	term.setCursorBlink(true)
 	
-	-- Main loop
+	--Main loop
 	local tid = os.startTimer(3)
 	while true do
 		local e, key, cx, cy = os.pullEvent()
 		if e == "key" and allowEditorEvent then
 			if key == 200 and y > 1 then
-				-- Up
+				--Up
 				x, y = math.min(x, lines[y - 1]:len() + 1), y - 1
 				drawLine(y, y + 1)
 				cursorLoc(x, y)
 			elseif key == 208 and y < #lines then
-				-- Down
+				--Down
 				x, y = math.min(x, lines[y + 1]:len() + 1), y + 1
 				drawLine(y, y - 1)
 				cursorLoc(x, y)
 			elseif key == 203 and x > 1 then
-				-- Left
+				--Left
 				x = x - 1
 				local force = false
 				if y - scrolly + offy < offy + 1 then force = true end
 				cursorLoc(x, y, force)
 			elseif key == 205 and x < lines[y]:len() + 1 then
-				-- Right
+				--Right
 				x = x + 1
 				local force = false
 				if y - scrolly + offy < offy + 1 then force = true end
 				cursorLoc(x, y, force)
 			elseif (key == 28 or key == 156) and (displayCode and true or y + scrolly - 1 ==
 					liveErr.line) then
-				-- Enter
+				--Enter
 				local f = nil
 				for _, v in pairs(standardsCompletions) do
 					if lines[y]:find(v) and x == #lines[y] + 1 then f = v end
@@ -1729,7 +1701,7 @@ local function edit(path)
 					cursorLoc(x, y, true)
 				end
 			elseif key == 14 and (displayCode and true or y + scrolly - 1 == liveErr.line) then
-				-- Backspace
+				--Backspace
 				if x > 1 then
 					local f = false
 					for k, v in pairs(liveCompletions) do
@@ -1748,19 +1720,19 @@ local function edit(path)
 					cursorLoc(x, y, true)
 				end
 			elseif key == 199 then
-				-- Home
+				--Home
 				x = 1
 				local force = false
 				if y - scrolly + offy < offy + 1 then force = true end
 				cursorLoc(x, y, force)
 			elseif key == 207 then
-				-- End
+				--End
 				x = lines[y]:len() + 1
 				local force = false
 				if y - scrolly + offy < offy + 1 then force = true end
 				cursorLoc(x, y, force)
 			elseif key == 211 and (displayCode and true or y + scrolly - 1 == liveErr.line) then
-				-- Forward Delete
+				--Forward Delete
 				if x < lines[y]:len() + 1 then
 					lines[y] = lines[y]:sub(1, x - 1) .. lines[y]:sub(x + 1)
 					local force = false
@@ -1774,7 +1746,7 @@ local function edit(path)
 					cursorLoc(x, y)
 				end
 			elseif key == 15 and (displayCode and true or y + scrolly - 1 == liveErr.line) then
-				-- Tab
+				--Tab
 				lines[y] = string.rep(" ", tabWidth) .. lines[y]
 				x = x + 2
 				local force = false
@@ -1782,12 +1754,12 @@ local function edit(path)
 				drawLine(y)
 				cursorLoc(x, y, force)
 			elseif key == 201 then
-				-- Page up
+				--Page up
 				y = math.min(math.max(y - edh, 1), #lines)
 				x = math.min(lines[y]:len() + 1, x)
 				cursorLoc(x, y, true)
 			elseif key == 209 then
-				-- Page down
+				--Page down
 				y = math.min(math.max(y + edh, 1), #lines)
 				x = math.min(lines[y]:len() + 1, x)
 				cursorLoc(x, y, true)
@@ -1850,7 +1822,7 @@ local function edit(path)
 				end
 				local menux = curx + 2
 
-				-- Flash menu item
+				--Flash menu item
 				term.setCursorBlink(false)
 				term.setCursorPos(menux, 1)
 				term.setBackgroundColor(colors[theme.background])
@@ -1860,7 +1832,7 @@ local function edit(path)
 				sleep(0.1)
 				drawMenu()
 
-				-- Execute item
+				--Execute item
 				local opt = executeMenuItem(a, path)
 				if opt then return opt end
 			end
@@ -1887,20 +1859,20 @@ local function edit(path)
 			tid = os.startTimer(3)
 		end
 
-		-- Draw
+		--Draw
 		if hasScrolled and os.clock() - scrollClock > 0.1 then
 			draw()
 			term.setCursorPos(x - scrollx + offx, y - scrolly + offy)
 			hasScrolled = false
 		end
 
-		-- Autosave
+		--Autosave
 		if os.clock() - autosaveClock > autosaveInterval then
 			saveFile(path, lines)
 			autosaveClock = os.clock()
 		end
 
-		-- Errors
+		--Errors
 		if os.clock() - liveErrorClock > 1 then
 			local prevLiveErr = liveErr
 			liveErr = currentLanguage.parseError(nil)
@@ -1917,19 +1889,18 @@ local function edit(path)
 	return "menu"
 end
 
-
---  -------- Open File
+-- -------- Open File
 
 local function newFile()
 	local wid = w - 13
 
-	-- Get name
+	--Get name
 	title("Lua IDE - New File")
 	local name = centerRead(wid, "/")
 	if not name or name == "" then return "menu" end
 	name = "/" .. name
 
-	-- Clear
+	--Clear
 	title("Lua IDE - New File")
 	term.setTextColor(colors[theme.textColor])
 	term.setBackgroundColor(colors[theme.promptHighlight])
@@ -1953,13 +1924,13 @@ end
 local function openFile()
 	local wid = w - 13
 
-	-- Get name
+	--Get name
 	title("Lua IDE - Open File")
 	local name = centerRead(wid, "/")
 	if not name or name == "" then return "menu" end
 	name = "/" .. name
 
-	-- Clear
+	--Clear
 	title("Lua IDE - New File")
 	term.setTextColor(colors[theme.textColor])
 	term.setBackgroundColor(colors[theme.promptHighlight])
@@ -1980,8 +1951,7 @@ local function openFile()
 	else return "edit", name end
 end
 
-
---  -------- Settings
+-- -------- Settings
 
 local function update()
 	local function draw(status)
@@ -2120,8 +2090,7 @@ local function settings()
 	elseif opt == "Exit IDE" then return "exit" end
 end
 
-
---  -------- Menu
+-- -------- Menu
 
 local function menu()
 	title("Welcome to LuaIDE " .. version)
@@ -2135,46 +2104,45 @@ local function menu()
 	elseif opt == "Exit IDE" then return "exit" end
 end
 
-
---  -------- Main
+-- -------- Main
 
 local function main(arguments)
 	local opt, data = "menu", nil
 
-	-- Check arguments
+	--Check arguments
 	if type(arguments) == "table" and #arguments > 0 then
 		local f = "/" .. shell.resolve(arguments[1])
 		if fs.isDir(f) then print("Cannot edit a directory.") end
 		opt, data = "edit", f
 	end
 
-	-- Main run loop
+	--Main run loop
 	while true do
-		-- Menu
+		--Menu
 		if opt == "menu" then opt = menu() end
 
-		-- Other
+		--Other
 		if opt == "new" then opt, data = newFile()
 		elseif opt == "open" then opt, data = openFile()
 		elseif opt == "settings" then opt = settings()
 		end if opt == "exit" then break end
 
-		-- Edit
+		--Edit
 		if opt == "edit" and data then opt = edit(data) end
 	end
 end
 
--- Load Theme
+--Load Theme
 if fs.exists(themeLocation) then theme = loadTheme(themeLocation) end
 if not theme and isAdvanced() then theme = defaultTheme
 elseif not theme then theme = normalTheme end
 
--- Run
+--Run
 local _, err = pcall(function()
 	parallel.waitForAny(function() main(arguments) end, monitorKeyboardShortcuts)
 end)
 
--- Catch errors
+--Catch errors
 if err and not err:find("Terminated") then
 	term.setCursorBlink(false)
 	title("LuaIDE - Crash! D:")
@@ -2200,7 +2168,7 @@ if err and not err:find("Terminated") then
 	term.setCursorPos(6, cy + 2)
 	term.write("Please report this error to")
 	term.setCursorPos(6, cy + 3)
-	term.write("GravityScore! ")
+	term.write("RaaynML! ")
 	
 	term.setBackgroundColor(colors[theme.background])
 	if isAdvanced() then centerPrint("Click to Exit...", h - 1)
@@ -2210,15 +2178,16 @@ if err and not err:find("Terminated") then
 		if e == "mouse_click" or (not isAdvanced() and e == "key") then break end
 	end
 
-	-- Prevent key from being shown
+	--Prevent key from being shown
 	os.queueEvent("")
 	os.pullEvent()
 end
 
--- Exit
+--Exit
 term.setBackgroundColor(colors.black)
 term.setTextColor(colors.white)
 term.clear()
 term.setCursorPos(1, 1)
 centerPrint("Thank You for Using Lua IDE " .. version)
-centerPrint("Made by GravityScore")
+centerPrint("Made by GravityScore") 
+centerPrint("(light theme added by RaaynML)")

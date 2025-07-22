@@ -1,14 +1,10 @@
-
 --
---  LuaIDE
---  Copyright GravityScore 2014
---  20 April 2014
+-- LuaIDE
+-- Copyright GravityScore 2014
+-- 20 April 2014
 --
 
-
-
---    Variables
-
+-- Variables
 
 local version = "2.0"
 
@@ -27,10 +23,7 @@ local theme = {
 	["error"] = colors.red,
 }
 
-
-
---    Utilities
-
+-- Utilities
 
 local function clear(bg, fg)
 	term.setTextColor(fg)
@@ -38,7 +31,6 @@ local function clear(bg, fg)
 	term.clear()
 	term.setCursorPos(1, 1)
 end
-
 
 local function fill(x, y, width, height, bg)
 	term.setBackgroundColor(bg)
@@ -48,7 +40,6 @@ local function fill(x, y, width, height, bg)
 	end
 end
 
-
 local function center(text)
 	local x, y = term.getCursorPos()
 	local w, h = term.getSize()
@@ -57,7 +48,6 @@ local function center(text)
 	term.write(text)
 	term.setCursorPos(1, y + 1)
 end
-
 
 local function centerSplit(text, width)
 	local words = {}
@@ -84,7 +74,6 @@ local function centerSplit(text, width)
 	end
 end
 
-
 local function localiseEvent(event, startY, startX)
 	local localised = event
 
@@ -101,14 +90,10 @@ local function localiseEvent(event, startY, startX)
 	return localised
 end
 
-
-
---    Files
-
+-- Files
 
 local File = {}
 File.__index = File
-
 
 function File.new(path)
 	local self = setmetatable({}, File)
@@ -117,16 +102,13 @@ function File.new(path)
 	return self
 end
 
-
 function File:setup(path)
 	self.path = path
 end
 
-
 function File:exists()
 	return fs.exists(self.path) and not fs.isDir(self.path)
 end
-
 
 function File:get()
 	if not self:exists() then
@@ -139,7 +121,6 @@ function File:get()
 
 	return contents
 end
-
 
 function File:getLines()
 	if not self:exists() then
@@ -162,11 +143,9 @@ function File:getLines()
 	return lines
 end
 
-
 function File:saveLines(lines)
 	self:save(table.concat(lines, "\n"))
 end
-
 
 function File:save(contents)
 	if fs.isDir(self.path) or fs.isReadOnly(self.path) then
@@ -180,17 +159,12 @@ function File:save(contents)
 	return true
 end
 
-
-
---    Content
-
+-- Content
 
 local Content = {}
 Content.__index = Content
 
-
 Content.startY = 3
-
 
 function Content.new()
 	local self = setmetatable({}, Content)
@@ -199,12 +173,10 @@ function Content.new()
 	return self
 end
 
-
 function Content:setup()
 	local height = h - Content.startY + 1
 	self.win = window.create(term.native(), 1, Content.startY, w, height, false)
 end
-
 
 function Content:show()
 	term.redirect(self.win)
@@ -213,34 +185,26 @@ function Content:show()
 	self.win.restoreCursor()
 end
 
-
 function Content:hide()
 	self.win.setVisible(false)
 end
-
 
 function Content:draw()
 	self:show()
 end
 
-
 function Content:getName()
 	return "test"
 end
-
 
 function Content:event(event)
 	print(table.concat(event, " "))
 end
 
-
-
---    Content Manager
-
+-- Content Manager
 
 local ContentManager = {}
 ContentManager.__index = ContentManager
-
 
 function ContentManager.new()
 	local self = setmetatable({}, ContentManager)
@@ -249,12 +213,10 @@ function ContentManager.new()
 	return self
 end
 
-
 function ContentManager:setup()
 	self.contents = {}
 	self.current = 1
 end
-
 
 function ContentManager:create(index)
 	if not index then
@@ -265,7 +227,6 @@ function ContentManager:create(index)
 	table.insert(self.contents, index, content)
 end
 
-
 function ContentManager:switch(index)
 	if self.contents[index] then
 		self:hideAll()
@@ -273,7 +234,6 @@ function ContentManager:switch(index)
 		self.contents[self.current]:show()
 	end
 end
-
 
 function ContentManager:close(index)
 	if not index then
@@ -290,7 +250,6 @@ function ContentManager:close(index)
 	end
 end
 
-
 function ContentManager:getTabNames()
 	local names = {}
 	for _, content in pairs(self.contents) do
@@ -300,11 +259,9 @@ function ContentManager:getTabNames()
 	return names
 end
 
-
 function ContentManager:show()
 	self.contents[self.current]:show()
 end
-
 
 function ContentManager:hideAll()
 	for i, _ in pairs(self.contents) do
@@ -312,28 +269,22 @@ function ContentManager:hideAll()
 	end
 end
 
-
 function ContentManager:event(event)
 	self.contents[self.current]:event(event)
 end
 
-
-
---    Tab Bar
+-- Tab Bar
 
 -- Delegate responds to:
---  getTabNames()
-
+-- getTabNames()
 
 local TabBar = {}
 TabBar.__index = TabBar
-
 
 TabBar.y = 2
 
 TabBar.maxTabWidth = 8
 TabBar.maxTabs = 5
-
 
 function TabBar.new(delegate)
 	local self = setmetatable({}, TabBar)
@@ -341,7 +292,6 @@ function TabBar.new(delegate)
 
 	return self
 end
-
 
 function TabBar.sanitiseName(name)
 	local new = name:gsub("^%s*(.-)%s*$", "%1")
@@ -356,13 +306,11 @@ function TabBar.sanitiseName(name)
 	return new:gsub("^%s*(.-)%s*$", "%1")
 end
 
-
 function TabBar:setup(delegate)
 	self.delegate = delegate
 	self.win = window.create(term.native(), 1, TabBar.y, w, 1, false)
 	self.current = 1
 end
-
 
 function TabBar:draw()
 	local names = self.delegate:getTabNames()
@@ -397,7 +345,6 @@ function TabBar:draw()
 	end
 end
 
-
 function TabBar:determineClickedTab(x, y)
 	local index, action = nil, nil
 
@@ -428,7 +375,6 @@ function TabBar:determineClickedTab(x, y)
 	return action, index
 end
 
-
 function TabBar:click(button, x, y)
 	local action, index = self:determineClickedTab(x, y)
 
@@ -453,7 +399,6 @@ function TabBar:click(button, x, y)
 	return cancel
 end
 
-
 function TabBar:event(event)
 	local cancel = false
 
@@ -464,14 +409,10 @@ function TabBar:event(event)
 	return cancel
 end
 
-
-
---    Content Manager and Tab Bar Link
-
+-- Content Manager and Tab Bar Link
 
 local ContentTabLink = {}
 ContentTabLink.__index = ContentTabLink
-
 
 function ContentTabLink.new()
 	local self = setmetatable({}, ContentTabLink)
@@ -479,7 +420,6 @@ function ContentTabLink.new()
 
 	return self
 end
-
 
 function ContentTabLink:setup()
 	self.contentManager = ContentManager.new()
@@ -490,12 +430,10 @@ function ContentTabLink:setup()
 	self.contentManager:switch(index)
 end
 
-
 function ContentTabLink:draw()
 	self.tabBar:draw()
 	self.contentManager.contents[self.contentManager.current]:draw()
 end
-
 
 function ContentTabLink:getTabBarAction(event)
 	local action = nil
@@ -507,7 +445,6 @@ function ContentTabLink:getTabBarAction(event)
 	return action
 end
 
-
 function ContentTabLink:tabBarAction(action, index)
 	if action == "switch" then
 		self.contentManager:switch(index)
@@ -517,7 +454,6 @@ function ContentTabLink:tabBarAction(action, index)
 		self.contentManager:create()
 	end
 end
-
 
 function ContentTabLink:event(event)
 	local cancel = false
@@ -540,14 +476,10 @@ function ContentTabLink:event(event)
 	return cancel
 end
 
-
-
---    Shortcut Handler
-
+-- Shortcut Handler
 
 local ShortcutManager = {}
 ShortcutManager.__index = ShortcutManager
-
 
 function ShortcutManager.new()
 	local self = setmetatable({}, ShortcutManager)
@@ -555,7 +487,6 @@ function ShortcutManager.new()
 
 	return self
 end
-
 
 function ShortcutManager:setup()
 	self.timeout = 0.4
@@ -565,7 +496,6 @@ function ShortcutManager:setup()
 	self.shiftTimerID = -1
 	self.controlTimerID = -1
 end
-
 
 function ShortcutManager:key(key)
 	if key == 42 or key == 54 then
@@ -577,7 +507,6 @@ function ShortcutManager:key(key)
 	end
 end
 
-
 function ShortcutManager:char(char)
 	if self.controlPressed and self.shiftPressed then
 		os.queueEvent("shortcut", "ctrl shift", char:lower())
@@ -585,7 +514,6 @@ function ShortcutManager:char(char)
 		os.queueEvent("shortcut", "ctrl", char:lower())
 	end
 end
-
 
 function ShortcutManager:timer(id)
 	if id == self.shiftTimerID then
@@ -597,7 +525,6 @@ function ShortcutManager:timer(id)
 	end
 end
 
-
 function ShortcutManager:event(event)
 	if event[1] == "key" then
 		self:key(event[2])
@@ -608,14 +535,10 @@ function ShortcutManager:event(event)
 	end
 end
 
-
-
---    Menu Bar Item
-
+-- Menu Bar Item
 
 local MenuItem = {}
 MenuItem.__index = MenuItem
-
 
 function MenuItem.new(name, subitems, shortcuts)
 	local self = setmetatable({}, MenuItem)
@@ -624,11 +547,9 @@ function MenuItem.new(name, subitems, shortcuts)
 	return self
 end
 
-
 function MenuItem.displayShortcut(shortcut)
 	return shortcut:gsub("ctrl ", "^"):gsub("shift ", "-"):upper()
 end
-
 
 function MenuItem.appendShortcut(name, shortcut, width)
 	local actual = name
@@ -641,13 +562,11 @@ function MenuItem.appendShortcut(name, shortcut, width)
 	return actual
 end
 
-
 function MenuItem:setup(name, subitems, shortcuts)
 	self.name = name
 	self.subitems = subitems
 	self.shortcuts = shortcuts
 end
-
 
 function MenuItem:setupWindow(x, y)
 	local shortcutWidth = 0
@@ -673,7 +592,6 @@ function MenuItem:setupWindow(x, y)
 	self.win = window.create(term.native(), x, y, self.width, self.height, false)
 end
 
-
 function MenuItem:determineClickedItem(x, y)
 	local index = nil
 
@@ -683,7 +601,6 @@ function MenuItem:determineClickedItem(x, y)
 
 	return index
 end
-
 
 function MenuItem:draw(highlightIndex)
 	term.redirect(self.win)
@@ -704,35 +621,27 @@ function MenuItem:draw(highlightIndex)
 	end
 end
 
-
 function MenuItem:highlightItem(index)
 	self:draw(index)
 	sleep(0.1)
 	self:draw()
 end
 
-
 function MenuItem:close()
 	self.win.setVisible(false)
 end
-
 
 function MenuItem:open()
 	self.win.setVisible(true)
 	self:draw()
 end
 
-
-
---    Menu Bar
-
+-- Menu Bar
 
 local MenuBar = {}
 MenuBar.__index = MenuBar
 
-
 MenuBar.y = 1
-
 
 function MenuBar.new(items)
 	local self = setmetatable({}, MenuBar)
@@ -740,7 +649,6 @@ function MenuBar.new(items)
 
 	return self
 end
-
 
 function MenuBar:setup(items)
 	self.items = items
@@ -755,7 +663,6 @@ function MenuBar:setup(items)
 		currentX = currentX + item.name:len() + 2
 	end
 end
-
 
 function MenuBar:draw(highlightIndex)
 	term.redirect(self.win)
@@ -778,7 +685,6 @@ function MenuBar:draw(highlightIndex)
 	end
 end
 
-
 function MenuBar:determineClickedMenu(x, y)
 	local index = nil
 
@@ -797,13 +703,11 @@ function MenuBar:determineClickedMenu(x, y)
 	return index
 end
 
-
 function MenuBar:highlightMenu(index)
 	self:draw(index)
 	sleep(0.1)
 	self:draw()
 end
-
 
 function MenuBar:openMenu(index)
 	self.isMenuOpen = true
@@ -813,7 +717,6 @@ function MenuBar:openMenu(index)
 	self:highlightMenu(index)
 end
 
-
 function MenuBar:closeAllMenus()
 	self.isMenuOpen = false
 	self.openMenuIndex = nil
@@ -822,7 +725,6 @@ function MenuBar:closeAllMenus()
 		item:close()
 	end
 end
-
 
 function MenuBar:click(button, x, y)
 	local cancel = false
@@ -858,7 +760,6 @@ function MenuBar:click(button, x, y)
 	return cancel
 end
 
-
 function MenuBar:shortcut(shortcut)
 	for menuI, menu in pairs(self.items) do
 		for itemI, test in pairs(menu.shortcuts) do
@@ -868,7 +769,6 @@ function MenuBar:shortcut(shortcut)
 		end
 	end
 end
-
 
 function MenuBar:event(event)
 	local cancel = false
@@ -882,14 +782,10 @@ function MenuBar:event(event)
 	return cancel
 end
 
-
-
---    App
-
+-- App
 
 local App = {}
 App.__index = App
-
 
 function App.new()
 	local self = setmetatable({}, App)
@@ -897,7 +793,6 @@ function App.new()
 
 	return self
 end
-
 
 function App:getMenuItems()
 	return {
@@ -945,19 +840,16 @@ function App:getMenuItems()
 	}
 end
 
-
 function App:setup()
 	self.manager = ContentTabLink.new()
 	self.menuBar = MenuBar.new(self:getMenuItems())
 	self.shortcutManager = ShortcutManager.new()
 end
 
-
 function App:draw()
 	self.menuBar:draw()
 	self.manager:draw()
 end
-
 
 function App:event(event)
 	local cancel = false
@@ -973,7 +865,6 @@ function App:event(event)
 	end
 end
 
-
 function App:main()
 	term.redirect(term.native())
 	clear(theme.background, theme.text)
@@ -986,14 +877,10 @@ function App:main()
 	end
 end
 
-
-
---    Error
-
+-- Error
 
 local Error = {}
 Error.__index = Error
-
 
 function Error.new(msg)
 	local self = setmetatable({}, Error)
@@ -1002,16 +889,13 @@ function Error.new(msg)
 	return self
 end
 
-
 function Error:setup(msg)
 	self.msg = msg
 end
 
-
 function Error:shouldThrow()
 	return self.msg and not self.msg:lower():find("terminate")
 end
-
 
 function Error:displayCrash()
 	clear(theme.background, theme.text)
@@ -1034,16 +918,12 @@ function Error:displayCrash()
 	os.pullEvent()
 end
 
-
-
---    Main
-
+-- Main
 
 local main = function()
 	local app = App.new()
 	app:main()
 end
-
 
 local original = term.current()
 local _, msg = pcall(main)
@@ -1053,7 +933,6 @@ local err = Error.new(msg)
 if err:shouldThrow() then
 	err:displayCrash()
 end
-
 
 clear(colors.black, colors.white)
 center("Thanks for using LuaIDE " .. version)
